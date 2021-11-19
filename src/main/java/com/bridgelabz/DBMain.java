@@ -22,6 +22,7 @@ public class DBMain {
             throw new IllegalStateException("Cannot find the driver in the Classpath!", e);
 
         }
+        listDriver();
         // establishing connection
         try {
             System.out.println("Connection to database :" +jdbcURL);
