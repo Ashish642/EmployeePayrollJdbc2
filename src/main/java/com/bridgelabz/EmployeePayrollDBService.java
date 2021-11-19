@@ -21,7 +21,7 @@ public class EmployeePayrollDBService {
     private Connection getConnection() throws SQLException {
         String jdbcURL = "jdbc:mysql://localhost:3306/payroll_service?useSSL=false";
         String userName = "root";
-        String password = "Pintu@2202";
+        String password = "Sudip@2201";
         Connection connection;
         System.out.println("Connecting to database:" + jdbcURL);
         connection = DriverManager.getConnection(jdbcURL, userName, password);
@@ -118,6 +118,29 @@ public class EmployeePayrollDBService {
     }
 
     /**
+     * Purpose : To update the employee salary in the database using
+     * PreparedStatement Interface
+     *
+     * @param name   : takes the name of that particular employee
+     * @param salary : takes the salary of that particular employee
+     * @return the updated salary of that assigned employee
+     * @throws EmployeePayrollException if the assigned employee details is not
+     *                                  found
+     */
+    private int updateEmployeeDataUsingPreparedStatement(String name, double salary) throws EmployeePayrollException {
+        String sql = "UPDATE employee_payroll SET salary = ? WHERE name = ?";
+        try (Connection connection = this.getConnection()) {
+            PreparedStatement statement = connection.prepareStatement(sql);
+            statement.setDouble(1, salary);
+            statement.setString(2, name);
+            return statement.executeUpdate();
+        } catch (SQLException e) {
+            throw new EmployeePayrollException(
+                    "Please check the updateEmployeePreparedStatement() for detailed information");
+        }
+    }
+
+    /**
      * Purpose : For creating a singleton object
      *
      * @return the classpath
@@ -180,5 +203,19 @@ public class EmployeePayrollDBService {
                     "Please check the getEmployeePayrollData(name) for detailed information");
         }
         return employeePayrollList;
+    }
+
+    /**
+     * Purpose : To update the salary in the database using PreparedStatement
+     * Interface
+     *
+     * @param name   : takes the name of that particular employee
+     * @param salary : takes the salary of that particular employee
+     * @return the updated salary of that assigned employee
+     * @throws EmployeePayrollException if the assigned employee details is not
+     *                                  found
+     */
+    public int updateEmployeeDataPreparedStatement(String name, double salary) throws EmployeePayrollException {
+        return this.updateEmployeeDataUsingPreparedStatement(name, salary);
     }
 }
